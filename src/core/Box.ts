@@ -22,11 +22,9 @@ export default class Box {
     }
 
     public static equals(a: Box, b: Box) {
-        return a.length === b.length && a.width === b.width && a.height === b.height;
+        BoxData.equals(a.data, b.data);
     }
     public static compare(a: Box, b: Box) {
-        return a.length !== b.length ? a.length - b.length : 
-            a.width !== b.width ? a.width - b.width : 
-                a.height - b.height;
+        BoxData.compare(a.data, b.data);
     }
 }

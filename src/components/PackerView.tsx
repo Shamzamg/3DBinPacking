@@ -117,6 +117,10 @@ export default class PackerView extends React.Component<IPackerViewProps> {
 
         const timeout = this.props.animate ? 200 : 0;
 
+        const { bins } = this.props;
+
+        bins.sort((a, b) => BoxData.compare(b, a));
+
         for(const boxData of this.props.bins) {
             let i = 0;
             for(let i = 0; i < boxData.quantity; i++) {
