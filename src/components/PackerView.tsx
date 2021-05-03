@@ -77,6 +77,10 @@ export default class PackerView extends React.Component<IPackerViewProps> {
         controls.update();
         controls.addEventListener('change', this.renderScene.bind(this));
 
+        // Orbit control will move lights
+        new OrbitControls(light1 as any, this.renderer.domElement);
+        new OrbitControls(light2 as any, this.renderer.domElement);
+
 
         const { size, bins, animate } = this.props;
 
