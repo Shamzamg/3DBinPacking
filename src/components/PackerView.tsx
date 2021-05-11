@@ -5,10 +5,13 @@ import Box from '../core/Box';
 
 import BoxData from '../core/BoxData';
 import BoxPacker from '../core/BoxPacker';
+import { Slider } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { ISize } from '../types/Size';
 import { sleep } from '../utils/Time';
 
 import './PackerView.css';
+import { AnimationMixer } from 'three';
 
 export interface IPackerViewProps {
     size: ISize;
@@ -21,6 +24,7 @@ export default class PackerView extends React.Component<IPackerViewProps> {
     private scene: Three.Scene | null = null;
     private renderer: Three.WebGLRenderer | null = null;
     private camera: Three.PerspectiveCamera | null = null;
+    private animationTime: number = 500;
 
     componentDidMount() {
         this.createScene();
@@ -42,7 +46,22 @@ export default class PackerView extends React.Component<IPackerViewProps> {
     public render() {
         return (
             <div>
-                <canvas ref={this.canvasRef}></canvas>
+                <div className='slider'>
+                    <Typography>Animation speed (ms)</Typography>
+                    <Slider   defaultValue={500}
+                    aria-labelledby="discrete-slider-1"
+                    valueLabelDisplay="auto"
+                    onChange={((event: React.ChangeEvent<{}>, value: number | number[]) => {
+                            this.animationTime = Number(value);
+                            //console.log(this.animationTime);
+                    })}
+                    step={200}
+                    marks
+                    min={300}
+                    max={3000}/>
+                </div>
+                <canvas ref={this.canvasRef}>
+                </canvas>
             </div>
         );
     }
@@ -119,7 +138,7 @@ export default class PackerView extends React.Component<IPackerViewProps> {
         const containerY = -packer.height / 2;
         const containerZ = -packer.width / 2;
 
-        const timeout = this.props.animate ? 200 : 0;
+        let timeout = this.props.animate ? this.animationTime : 0;
 
         const { bins } = this.props;
 
@@ -136,6 +155,8 @@ export default class PackerView extends React.Component<IPackerViewProps> {
                 this.renderScene();
 
                 if(timeout > 0) {
+                    timeout = this.props.animate ? this.animationTime : 0;
+                    console.log("timeout: " + timeout);
                     await sleep(timeout);
                 }
             }
